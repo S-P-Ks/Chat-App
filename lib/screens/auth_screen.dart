@@ -18,11 +18,10 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   final _auth = FirebaseAuth.instance;
   bool isLoading = false;
-  void _submitAuthForm(String email, String usern, String password,
-      File userImage, bool isLogin, BuildContext ctx) async {
+  void _submitAuthForm(String email, String password, String usern,
+      File? userImage, bool isLogin, BuildContext ctx) async {
     UserCredential authResult;
-    print(email);
-    print(password);
+
     var user;
 
     try {
@@ -33,23 +32,32 @@ class _AuthScreenState extends State<AuthScreen> {
       if (isLogin) {
         // authResult = await _auth.signInWithEmailAndPassword(
         //     email: email, password: password);
+
         var authResult = await _auth.signInWithEmailAndPassword(
             email: email, password: password);
-        print(authResult);
+
         user = authResult.user;
       } else {
-
         authResult = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
-        print(authResult);
+
         user = authResult.user;
 
-        FirebaseStorage.instance
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child("user_image")
+            .child(authResult.user!.uid + ".jpg");
+
+        await ref
+            .putFile(userImage!)
+            .whenComplete(() => print("Image uploaded successfully."));
+
+        final imgurl = await ref.getDownloadURL();
 
         FirebaseFirestore.instance
             .collection("users")
             .doc(user.uid)
-            .set({"email": email, "username": usern});
+            .set({"email": email, "username": usern, "imageURL": imgurl});
       }
       setState(() {
         isLoading = false;
@@ -74,7 +82,7 @@ class _AuthScreenState extends State<AuthScreen> {
       setState(() {
         isLoading = false;
       });
-      print("jabe");
+
       print(e);
 
       ScaffoldMessenger.of(ctx).showSnackBar(

@@ -1,6 +1,7 @@
 import 'package:chatapp/widgets/chat/message_bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class CharMessages extends StatelessWidget {
@@ -17,7 +18,7 @@ class CharMessages extends StatelessWidget {
       future: getUser(),
       builder: (ctx, futureSnapshot) {
         if (futureSnapshot.connectionState == ConnectionState.waiting) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }
@@ -34,17 +35,21 @@ class CharMessages extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 );
               }
-              final data = chatSnapShot.data!.docs;
+              final data = chatSnapShot.data!.docs
+                  as List<QueryDocumentSnapshot<Object?>>;
               final u = futureSnapshot.data as User;
 
               return ListView.builder(
                 reverse: true,
                 itemCount: chatSnapShot.data!.size,
-                itemBuilder: (ctx, index) => MessageBubble(
-                  message: "${data[index]["text"]}",
-                  isMe: data[index]["userId"] == u.uid,
-                  username: data[index]["username"],
-                ),
+                itemBuilder: (ctx, index) {
+                  return MessageBubble(
+                    message: "${data[index]["text"]}",
+                    isMe: data[index]["userId"] == u.uid,
+                    username: data[index]["username"],
+                    userId: u.uid,
+                  );
+                },
               );
             });
       },

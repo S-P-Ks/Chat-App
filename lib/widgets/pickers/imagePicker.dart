@@ -15,12 +15,17 @@ class _ImagePState extends State<ImageP> {
   File? image;
 
   Future<dynamic> getImage() async {
-    final imagePicker =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    final imagePicker = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 150,
+      imageQuality: 50,
+    );
     final img = File(imagePicker!.path);
     setState(() {
       image = img;
     });
+
+    widget.imagePicked(img);
     return image;
   }
 

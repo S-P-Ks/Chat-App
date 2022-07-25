@@ -8,7 +8,7 @@ class AuthForm extends StatefulWidget {
   AuthForm(this.submitFun, this.isLoading);
 
   final void Function(String email, String password, String username,
-      File userImage, bool isLogin, BuildContext ctx) submitFun;
+      File? userImage, bool isLogin, BuildContext ctx) submitFun;
   bool isLoading;
 
   @override
@@ -21,14 +21,14 @@ class _AuthFormState extends State<AuthForm> {
   String _userEmail = "";
   String _userName = "";
   String _userPassword = "";
-  File? userimage;
+  File? userimage = null;
 
   void _trySubmit(BuildContext context) {
-    if (_formKey.currentState != null && userimage != null) {
+    if (_formKey.currentState != null) {
       final isValid = _formKey.currentState?.validate();
       FocusScope.of(context).unfocus();
 
-      if (userimage == null) {
+      if (_isLogin != true && userimage == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Please pick and Image."),
@@ -39,14 +39,13 @@ class _AuthFormState extends State<AuthForm> {
       }
 
       if (isValid == true) {
-        print(isValid);
         _formKey.currentState!.save();
         // print(_userEmail);
         // print(_userName);
         // print(_userPassword);
 
         widget.submitFun(_userEmail.trim(), _userPassword, _userName.trim(),
-            userimage!, _isLogin, context);
+            userimage, _isLogin, context);
       }
     }
   }
@@ -112,7 +111,7 @@ class _AuthFormState extends State<AuthForm> {
                     key: ValueKey("password"),
                     validator: (value) {
                       if (value != null) {
-                        if (value.isEmpty || value.length < 7) {
+                        if (value.length < 7) {
                           return "Password must be 7 leters long";
                         }
                       } else {
