@@ -73,21 +73,22 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Chat',
       theme: ThemeData(
-          primarySwatch: Colors.blue,
-          backgroundColor: Colors.pink,
-          colorScheme: const ColorScheme(
-            brightness: Brightness.dark,
-            primary: Colors.teal,
-            onPrimary: Colors.indigo,
-            secondary: Colors.black,
-            onSecondary: Colors.white,
-            error: Colors.red,
-            onError: Colors.redAccent,
-            background: Colors.pink,
-            onBackground: Colors.pinkAccent,
-            surface: Colors.amber,
-            onSurface: Colors.white,
-          )),
+        primarySwatch: Colors.brown,
+        backgroundColor: Colors.pink,
+        colorScheme: const ColorScheme(
+          primary: Colors.blueAccent,
+          onPrimary: Colors.white,
+          secondary: Colors.black,
+          onSecondary: Colors.white,
+          error: Colors.red,
+          onError: Colors.redAccent,
+          background: Colors.pink,
+          onBackground: Colors.pinkAccent,
+          surface: Colors.black,
+          onSurface: Colors.white,
+          brightness: Brightness.dark,
+        ),
+      ),
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (ctx, userSnapshot) {

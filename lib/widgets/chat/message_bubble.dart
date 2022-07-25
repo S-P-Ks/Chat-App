@@ -27,43 +27,44 @@ class MessageBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     final userimg = getUserImg();
     return Container(
+      key: UniqueKey(),
       margin: const EdgeInsets.all(10),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           Row(
-              mainAxisAlignment:
-                  isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).accentColor,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  width: 140,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        isMe ? "You" : username,
-                        textAlign: TextAlign.start,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        message,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.surface),
-                      ),
-                    ],
-                  ),
+            mainAxisAlignment:
+                isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).accentColor,
+                  borderRadius: BorderRadius.circular(12),
                 ),
-              ]),
+                width: 140,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      isMe ? "You" : username,
+                      textAlign: TextAlign.start,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Text(
+                      message,
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
           // if (!isMe)
           //   Positioned(
           //     left: 125,
@@ -94,6 +95,7 @@ class MessageBubble extends StatelessWidget {
                     ),
                   );
                 }
+
                 return Positioned(
                   right: isMe ? 0 : null,
                   top: -10,

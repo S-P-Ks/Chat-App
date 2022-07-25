@@ -17,6 +17,7 @@ class _NewMessageState extends State<NewMessage> {
   var _token = "";
   final _controller = TextEditingController();
   dynamic u;
+  dynamic user;
 
   Future<void> getUser() async {
     User? user = await FirebaseAuth.instance.currentUser;
@@ -31,13 +32,19 @@ class _NewMessageState extends State<NewMessage> {
         _token = value!;
       });
     });
+
+    getU();
+  }
+
+  Future<void> getU() async {
+    user = await FirebaseAuth.instance.currentUser;
   }
 
   Future<void> saveToken(String uuid) async {
     await getUser();
     await FirebaseFirestore.instance
         .collection("UserToken")
-        .doc(uuid)
+        .doc(user!.uid)
         .update({"token": _token});
   }
 
@@ -54,8 +61,7 @@ class _NewMessageState extends State<NewMessage> {
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: constructFCMPayload(
-            "eFAe_tubRfGiWtss2RYWX4:APA91bG1ChdEML7H8gl3jwN2g2ZMGdGEBFNo7NsUNuuP-Sy3j9iueEyuiUe5ymjR8sJo8fwCcTKGjaQfa3kPqattpe9sB2obfy17v8kb36jvkSbKsmsMJZCOGRbheeig-jDd0mNnHp6V"),
+        body: constructFCMPayload(token),
       );
       print('FCM request for device sent!');
     } catch (e) {
@@ -100,8 +106,6 @@ class _NewMessageState extends State<NewMessage> {
       "userImage": userImg,
     });
 
-    saveToken(uid);
-
     setState(() {
       _enteredMessage = "";
     });
@@ -111,10 +115,11 @@ class _NewMessageState extends State<NewMessage> {
         .collection("UserToken")
         .doc(username)
         .get();
+    print("Token = ");
+    print(_token);
+    print("Token = ");
 
-    String token = snap["token"];
-
-    sendPushMessage(token);
+    sendPushMessage(_token);
   }
 
   @override

@@ -166,6 +166,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Chat App"),
+        backgroundColor: Colors.black45,
         actions: [
           DropdownButton<DropdownButton>(
             icon: Icon(
@@ -184,7 +185,10 @@ class _ChatScreenState extends State<ChatScreen> {
                       SizedBox(
                         width: 8,
                       ),
-                      Text("Logout"),
+                      Text(
+                        "Logout",
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ],
                   ),
                 ),
@@ -194,11 +198,12 @@ class _ChatScreenState extends State<ChatScreen> {
         ],
       ),
       body: Scaffold(
+          backgroundColor: Colors.black26,
           body: Container(
-        child: Column(
-          children: [Expanded(child: CharMessages()), NewMessage()],
-        ),
-      )),
+            child: Column(
+              children: [Expanded(child: CharMessages()), NewMessage()],
+            ),
+          )),
     );
   }
 }
