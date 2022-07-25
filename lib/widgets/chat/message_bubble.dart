@@ -96,16 +96,6 @@ class MessageBubble extends StatelessWidget {
                       radius: 20,
                     ),
                   );
-                } else if (snapshot.connectionState == ConnectionState.active) {
-                  print("Active");
-                  return Positioned(
-                    right: isMe ? 0 : null,
-                    top: -10,
-                    left: isMe ? null : 125,
-                    child: CircleAvatar(
-                      radius: 20,
-                    ),
-                  );
                 } else if (snapshot.connectionState == ConnectionState.done &&
                     snapshot.data != null) {
                   return Positioned(
