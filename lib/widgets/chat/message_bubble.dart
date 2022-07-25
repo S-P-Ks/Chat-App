@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 class MessageBubble extends StatelessWidget {
   final String message;
   final bool isMe;
@@ -18,7 +20,7 @@ class MessageBubble extends StatelessWidget {
   Future<dynamic> getUserImg() async {
     dynamic user =
         await FirebaseFirestore.instance.collection("users").doc(userId).get();
-    // print(user.data()!["username"]);
+    print(user.data()!["username"]);
     String url = await user.data()["imageURL"];
     return url;
   }
@@ -94,15 +96,35 @@ class MessageBubble extends StatelessWidget {
                       radius: 20,
                     ),
                   );
+                } else if (snapshot.connectionState == ConnectionState.active) {
+                  print("Active");
+                  return Positioned(
+                    right: isMe ? 0 : null,
+                    top: -10,
+                    left: isMe ? null : 125,
+                    child: CircleAvatar(
+                      radius: 20,
+                    ),
+                  );
+                } else if (snapshot.connectionState == ConnectionState.done &&
+                    snapshot.data != null) {
+                  return Positioned(
+                    right: isMe ? 0 : null,
+                    top: -10,
+                    left: isMe ? null : 125,
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundImage: NetworkImage(snapshot.data as String),
+                    ),
+                  );
                 }
-
+                print("Active");
                 return Positioned(
                   right: isMe ? 0 : null,
                   top: -10,
                   left: isMe ? null : 125,
                   child: CircleAvatar(
                     radius: 20,
-                    backgroundImage: NetworkImage(snapshot.data as String),
                   ),
                 );
               }),
